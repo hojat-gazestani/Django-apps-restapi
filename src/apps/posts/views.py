@@ -1,8 +1,9 @@
 from django.shortcuts import render
-from rest_framework import generics, permissions
+from rest_framework import generics
 
 from django.views.generic import ListView
 from .models import Post
+from .permissions import IsAuthorOrReadOnly
 from .serializers import PostSerializer
 
 class PostPageView(ListView):
@@ -10,10 +11,11 @@ class PostPageView(ListView):
     template_name = "posts.html"
 
 class PostList(generics.ListCreateAPIView):
+    permission_classes = (IsAuthorOrReadOnly,)
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (permissions.IsAdminUser,)
+    permission_classes = (IsAuthorOrReadOnly,)
     queryset = Post.objects.all()
     serializer_class = PostSerializer
