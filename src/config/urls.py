@@ -25,6 +25,8 @@ urlpatterns = [
         path('posts/', include('apps.posts.urls')),
     ])),
     path('api-auth/', include("rest_framework.urls")),
+    path('api/v1/dj-rest-auth/', include("dj_rest_auth.urls")),
+    path('api/v1/dj-rest-auth/registration/', include("dj_rest_auth.registration.urls")),
     path('accounts/', include("django.contrib.auth.urls")),
     path('accounts/', include('apps.accounts.urls')),
     path('pages/', include('apps.pages.urls')),

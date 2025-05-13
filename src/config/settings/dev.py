@@ -6,7 +6,7 @@ SECRET_KEY = env.str('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["0.0.0.0","http://localhost:3000","http://localhost:8000"]
+ALLOWED_HOSTS = ["127.0.0.1","0.0.0.0","http://localhost:3000","http://localhost:8000"]
 
 # Database
 DATABASES = {
