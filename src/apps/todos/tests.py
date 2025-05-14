@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
-from rest_framework import status
+from rest_framework import status, permissions
 from rest_framework.test import APITestCase
 
 from .models import Todo
@@ -29,6 +29,7 @@ class TodoModelTest(TestCase):
             reverse('todo_detail', kwargs={'pk': self.todo.id}),
             format='json'
         )
+        self.client.force_authenticate(user=self.user)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(Todo.objects.count(), 1)
         self.assertContains(response, "First Todo")
