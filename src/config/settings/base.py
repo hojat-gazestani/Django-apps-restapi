@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'dj_rest_auth.registration',
+    'drf_spectacular',
     'corsheaders',
     'crispy_forms',
     'crispy_bootstrap5',
@@ -77,6 +78,7 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.TokenAuthentication",
     ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 MIDDLEWARE = [
@@ -181,3 +183,9 @@ CRISPY_TEMPLATE_PACK = "tailwind"
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 SITE_ID = 1
+
+SPECTACULAR_SETTINGS = {
+    "TTILE": "Blog API Project",
+    "DESCRIPTION": "A Sample blog to learn about DRF",
+    "VERSION": "1.0.0",
+}
