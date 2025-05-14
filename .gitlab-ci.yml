@@ -1,0 +1,58 @@
+stages:
+  - stage
+  - build
+  - run
+
+variables:
+  IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+  IMAGE_TAG_LAT: $CI_REGISTRY_IMAGE:latest
+
+build_and_run_stage:
+  stage: stage
+  environment: stage
+  tags:
+    - srv-1
+  only:
+    - stage
+  script:
+    - echo "Building and running stage"
+    - echo "$ENVS" > .env
+    - docker compose --env-file .env -f docker/docker-compose-stage.yml -p ${PROJ} up -d --build;
+
+build-job:
+  stage: build
+  tags:
+    - srv-1
+  only:
+    - stage
+  when: manual
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build  -f docker/Dockerfile --add-host nexus.example.com:192.168.174.4 -t $IMAGE_TAG .
+    - docker tag $IMAGE_TAG $IMAGE_TAG_LAT
+    - docker push $IMAGE_TAG
+    - docker push $IMAGE_TAG_LAT
+
+.run:
+  stage: run
+  tags:
+    - srv-1
+  only:
+    - stage
+  script:
+    - hostname
+    - echo "$ENVS" > .env
+    - docker stop web-be-${PROJ} || true
+    - docker rm web-be-${PROJ} || true
+    - docker compose --env-file .env -f docker/docker-compose.yml -p ${PROJ} up -d;
+
+run_prod:
+  extends: .run
+  environment: prod
+  when: manual
+
+run_city1:
+  extends: .run
+  environment: city1
+  when: manual
+
